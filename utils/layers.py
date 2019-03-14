@@ -1,8 +1,17 @@
+# coding=utf-8
+
 import numpy as np
 import tensorflow as tf
 
 conv1d = tf.layers.conv1d
 
+'''
+(一头)注意力机制:
+从代码接口上来说，即是给定一个多点的输入，然后在这多个点之间应用注意力机制
+把某个点的特征映射为 “自己原始特征+注意力“ 处理后的结果，维度由out_sz指定
+如：
+把一个1433维度特征向量映射为8维
+'''
 def attn_head(seq, out_sz, bias_mat, activation, in_drop=0.0, coef_drop=0.0, residual=False):
     with tf.name_scope('my_attn'):
         if in_drop != 0.0:
@@ -20,7 +29,8 @@ def attn_head(seq, out_sz, bias_mat, activation, in_drop=0.0, coef_drop=0.0, res
             coefs = tf.nn.dropout(coefs, 1.0 - coef_drop)
         if in_drop != 0.0:
             seq_fts = tf.nn.dropout(seq_fts, 1.0 - in_drop)
-
+        
+        # 论文中的方程4
         vals = tf.matmul(coefs, seq_fts)
         ret = tf.contrib.layers.bias_add(vals)
 
