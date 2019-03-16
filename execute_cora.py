@@ -1,9 +1,15 @@
+# coding=utf-8
+
 import time
 import numpy as np
 import tensorflow as tf
 
 from models import GAT
 from utils import process
+
+'''
+从软件角度来看，把一个特征向量利用Attention Network从1433维映射到64维，最后再映射到输出结果
+'''
 
 checkpt_file = 'pre_trained/cora/mod_cora.ckpt'
 
